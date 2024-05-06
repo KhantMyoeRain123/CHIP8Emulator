@@ -126,6 +126,12 @@ void execute(chip8* cpu,instr_type instr_t){
         printf("------------------\n");
         break;
         case RET:
+        printf("Executing RET instruction.\n");
+        cpu->reg_set.pc.WORD=(cpu->memory[cpu->reg_set.sp.WORD-1]<<8) | (cpu->memory[cpu->reg_set.sp.WORD]);
+        cpu->reg_set.sp.WORD-=2;
+        printf("Stack pointer is now at 0x%x.\n",cpu->reg_set.sp.WORD);
+        printf("PC is set to 0x%x.\n",cpu->reg_set.pc.WORD);
+        printf("------------------\n");
         break;
         case JP:
         printf("Executing JP instruction.\n");
