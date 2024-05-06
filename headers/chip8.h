@@ -1,6 +1,7 @@
 #ifndef CHIP8_H
 #define CHIP8_H
 #include "memory.h"
+#define PROGRAM_START 0x200
 typedef struct{
     byte memory[4096]; //main memory 
     chip8regset reg_set;
