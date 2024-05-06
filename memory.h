@@ -1,6 +1,6 @@
 #ifndef MEMORY_H
 #define MEMORY_H
-#define STACK_SIZE 512
+#define STACK_SIZE 128
 typedef unsigned char byte;
 typedef union{
     unsigned short int WORD;

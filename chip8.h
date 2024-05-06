@@ -28,7 +28,8 @@ typedef enum{
     LDI,
     JPI,
     RND,
-    DRW
+    DRW,
+    EOP
 }instr_type;
 
 void chip8_init(chip8* cpu);
