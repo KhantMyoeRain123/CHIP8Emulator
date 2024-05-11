@@ -3,33 +3,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define BYTE_BUFFER_SIZE 5
+
 /*
 TODO:rewrite the function
 */
 int read_file(char * file_name, chip8* cpu){
+    printf("Reading File\n");
     FILE *file=fopen(file_name,"r");
-    char byte_buffer[3];
+    char byte_buffer[BYTE_BUFFER_SIZE];
     int i=0;//used to index memory location
     int count=0;
     int c; //current character
 
-    if(file==NULL)
+    if(file==NULL){
+        printf("File not found.\n");   
         return -1;
+    }
+    
     
     while((c=fgetc(file))!=EOF){
         //ignore whitespaces, 0 and x
-        if(c=='0' || c=='x' || c=='\n' || c=='\t' || c=='\r'){
+        if(c=='\n' || c=='\t' || c=='\r'){
             continue;
         }
-        if(count<2){
+        if(count<BYTE_BUFFER_SIZE-1){
             byte_buffer[count]=(char) c;
             count++;
         }
         else{
             byte_buffer[count]='\0';
             count=0;
-            cpu->memory[PROGRAM_START+i]=(byte)atoi(byte_buffer);
-            printf("Read 0x%x",cpu->memory[PROGRAM_START+i]);
+            cpu->memory[PROGRAM_START+i]=(byte)strtol(byte_buffer,NULL,16);
+            printf("Read 0x%x\n",cpu->memory[PROGRAM_START+i]);
             i++;
             byte_buffer[count]=(char)c; 
         }
