@@ -38,6 +38,7 @@ int read_file(char * file_name, chip8* cpu){
             printf("Read 0x%x\n",cpu->memory[PROGRAM_START+i]);
             i++;
             byte_buffer[count]=(char)c; 
+            count++;
         }
     }
 

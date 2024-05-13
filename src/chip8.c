@@ -25,12 +25,16 @@ word fetch(chip8* cpu){
     instr.BYTE.high=high;
     instr.BYTE.low=low;
 
-    cpu->reg_set.pc.WORD+=2; //increment to next instruction word
+    increment_pc(cpu); //increment to next instruction word
     return instr;
 }
 
 void set_operand(chip8* cpu,word value){
     cpu->reg_set.operand.WORD=value.WORD;
+}
+
+void increment_pc(chip8* cpu){
+    cpu->reg_set.pc.WORD+=2;
 }
 
 instr_type decode(chip8* cpu,word instr){
@@ -44,8 +48,6 @@ instr_type decode(chip8* cpu,word instr){
     head.WORD=(instr.WORD & 0xF000)>>12;
     byte last_four_bits=(instr.WORD & 0x000F);
     last_twelve_bits.WORD=(instr.WORD & 0x0FFF);
-    last_byte.WORD=(instr.WORD & 0x00FF);
-
 
     switch(head.WORD){
         case 0:
@@ -79,8 +81,7 @@ instr_type decode(chip8* cpu,word instr){
         case 3:
             printf("Fetched SEb\n");
             //set operand to last byte
-            set_operand(cpu,last_byte);
-
+            set_operand(cpu,last_twelve_bits);
             return SEb;
         break;
         case 4:
@@ -158,6 +159,19 @@ void execute(chip8* cpu,instr_type instr_t){
         printf("------------------\n");
         break;
         case SEb:
+        printf("Executing SEb instruction.\n");
+        word reg;
+        word op;
+        reg.WORD=(cpu->reg_set.operand.WORD & 0x0F00)>>8;
+        op.WORD=(cpu->reg_set.operand.WORD & 0x00FF);
+        if(cpu->reg_set.v[reg.WORD]==(byte)op.WORD){
+        printf("Skipping next instruction since 0x%x==0x%x.\n",cpu->reg_set.v[reg.WORD],(byte)op.WORD);
+        increment_pc(cpu);
+        }
+        else{
+        printf("Not skipping next instruction since 0x%x!=0x%x.\n",cpu->reg_set.v[reg.WORD],(byte)op.WORD); 
+        }
+        printf("------------------\n");
         break;
         default:
         break;

@@ -7,6 +7,8 @@ emulator.out: $(objects)
 %.o:%.c
 	clang -o $@ -c $<
 
+clean:
+	rm -f emulator *.o
 
 
 
